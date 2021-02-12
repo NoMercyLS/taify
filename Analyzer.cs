@@ -32,22 +32,22 @@ namespace LexicalAnalyzer
                 {"//", "commentary" },
                 {"{", "brace" },
                 {"}", "brace" },
-                {"(", "braket" },
-                {")", "braket" },
-                {"[", "braket" },
-                {"]", "braket" },
+                {"(", "bracket" },
+                {")", "bracket" },
+                {"[", "bracket" },
+                {"]", "bracket" },
                 {"<", "comparison" },
                 {">", "comparison" },
                 {"==", "comparison" },
                 {"!=", "comparison" },
-                {"&", "comparison" },
+                {"&&", "comparison" },
                 {"||", "comparison" },
                 {">=", "comparison" },
                 {"<=", "comparison" }
             };
         }
 
-        public bool IsIdentifier(string word)
+        private static bool IsIdentifier(string word)
         {
             foreach (char ch in word)
             {
