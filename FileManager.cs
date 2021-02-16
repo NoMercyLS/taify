@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace LexicalAnalyzer
 {
@@ -14,6 +11,11 @@ namespace LexicalAnalyzer
         {
             _inputStream = inputStream;
             _outputStream = outputStream;
+        }
+
+        public string GetOutputString(string word, State.State state, int v, int h)
+        {
+            return $"Word: {word} | Token: {state} | Position {v}:{h}";
         }
 
         public string ReadLine()
