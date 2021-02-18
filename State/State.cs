@@ -1,5 +1,6 @@
 ﻿namespace LexicalAnalyzer.State
 {
+    //TODO: Add new state COMPARISON
     public enum State
     {
         Wait,
@@ -13,7 +14,7 @@
         Commentary,
         Operator,
         Separator,
-        Delimeter,
+        Delimiter,
         Keyword,
         Final,
         Error

@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 namespace LexicalAnalyzer
 {
     public class CharManager
     {
-        List<char> _digits = new List<char> { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-        List<char> _alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToList();
-        List<char> _delimeters = new List<char> { '[', ']', '(', ')', '{', '}' };
-        List<char> _operators = new List<char> { '+', '-', '*', '/' };
+        private readonly List<char> _digits = new List<char> { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+        private readonly List<char> _alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToList();
+        private readonly List<char> _delimiters = new List<char> { '[', ']', '(', ')', '{', '}' };
+        private readonly List<char> _operators = new List<char> { '+', '-', '*', '/', '=' };
 
         public bool IsDigit(char ch)
         {
@@ -19,9 +20,9 @@ namespace LexicalAnalyzer
             return _alphabet.Contains(ch);
         }
 
-        public bool IsDelimeter(char ch)
+        public bool IsDelimiter(char ch)
         {
-            return _delimeters.Contains(ch);
+            return _delimiters.Contains(ch);
         }
 
         public bool IsOperator(char ch)

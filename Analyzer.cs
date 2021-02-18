@@ -33,7 +33,7 @@ namespace LexicalAnalyzer
             }
         }
 
-        public char GetChar()
+        private char GetChar()
         {
             char ch = _lines[_verticalPos][_horizontalPos];
             //TODO: Add new state which drops current state on readln
@@ -98,12 +98,14 @@ namespace LexicalAnalyzer
                                 _state = State.State.Operator;
                                 break;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _state = State.State.Delimeter;
+                                _state = State.State.Delimiter;
                                 break;
                             }
                             break;
+                        //TODO: After accept identifier needs to get word token,
+                        //if token doesn't exists return Identifier token
                         case State.State.Identifier:
                             ch = GetChar();
                             if (_charManager.IsDigit(ch) || _charManager.IsLetter(ch))
@@ -113,25 +115,25 @@ namespace LexicalAnalyzer
                             }
                             if (ch == ';')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Separator;
                                 break;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
-                                _state = State.State.Delimeter;
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _state = State.State.Delimiter;
                                 break;
                             }
                             if (_charManager.IsOperator(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Operator;
                                 break;
                             }
                             if (ch == ' ')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 word = "";
                                 _state = State.State.Wait;
                             }
@@ -156,12 +158,12 @@ namespace LexicalAnalyzer
                             if (_charManager.IsLetter(ch))
                             {
                                 word += ch;
-                                if (ch == 'b' || word[word.Length - 1] == 0)
+                                if (ch == 'b' || word[^1] == 0)
                                 {
                                     _state = State.State.BinaryInteger;
                                     break;
                                 }
-                                if (ch == 'x' || word[word.Length - 1] == 0)
+                                if (ch == 'x' || word[^1] == 0)
                                 {
                                     _state = State.State.HexInteger;
                                     break;
@@ -181,7 +183,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Float;
                                 break;
                             }
-                            if (ch == ' ' || _charManager.IsDelimeter(ch) || _charManager.IsOperator(ch))
+                            if (ch == ' ' || _charManager.IsDelimiter(ch) || _charManager.IsOperator(ch))
                             {
                                 _state = State.State.Integer;
                                 break;
@@ -205,26 +207,26 @@ namespace LexicalAnalyzer
                                 _state = State.State.Error;
                                 break;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
-                                _state = State.State.Delimeter;
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _state = State.State.Delimiter;
                                 break;
                             }
                             if (_charManager.IsOperator(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
                                 _state = State.State.Operator;
                                 break;
                             }
                             if (ch == ';')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Separator;
                             }
                             if (ch == ' ')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 word = "";
                                 _state = State.State.Wait;
                             }
@@ -241,27 +243,27 @@ namespace LexicalAnalyzer
                                 _state = State.State.Error;
                                 break;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
-                                _state = State.State.Delimeter;
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _state = State.State.Delimiter;
                                 break;
                             }
                             if (_charManager.IsOperator(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
                                 _state = State.State.Operator;
                                 break;
                             }
                             if (ch == ' ')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 word = "";
                                 _state = State.State.Wait;
                             }
                             if (ch == ';')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Separator;
                             }
                             break;
@@ -278,21 +280,21 @@ namespace LexicalAnalyzer
                                 _state = State.State.Error;
                                 break;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
-                                _state = State.State.Delimeter;
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _state = State.State.Delimiter;
                                 break;
                             }
                             if (_charManager.IsOperator(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
                                 _state = State.State.Operator;
                                 break;
                             }
                             if (ch == ';')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Separator;
                             }
                             break;
@@ -309,21 +311,21 @@ namespace LexicalAnalyzer
                                 _state = State.State.Error;
                                 break;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
-                                _state = State.State.Delimeter;
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _state = State.State.Delimiter;
                                 break;
                             }
                             if (_charManager.IsOperator(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
                                 _state = State.State.Operator;
                                 break;
                             }
                             if (ch == ';')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Separator;
                             }
                             break;
@@ -335,21 +337,21 @@ namespace LexicalAnalyzer
                                 _state = State.State.Error;
                                 break;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
-                                _state = State.State.Delimeter;
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _state = State.State.Delimiter;
                                 break;
                             }
                             if (_charManager.IsOperator(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _horizontalPos, _verticalPos));
                                 _state = State.State.Operator;
                                 break;
                             }
                             if (ch == ';')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Separator;
                                 break;
                             }
@@ -365,19 +367,20 @@ namespace LexicalAnalyzer
                             }
                             else
                             {
-                                Console.WriteLine("HERE");
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
                         case State.State.Commentary:
-                            _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                             word = "";
                             _horizontalPos = 0;
                             _verticalPos++;
                             _state = State.State.Wait;
                             break;
                         case State.State.Operator:
+                            //TODO: Rework this case because of bug with = operator
+                            //TODO: Also needs to process == comparison
                             word = "";
                             word += ch;
                             if (ch == '/')
@@ -389,16 +392,16 @@ namespace LexicalAnalyzer
                                     break;
                                 }
                             }
-                            _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                             word = "";
                             word += ch;
                             if (_charManager.IsDigit(ch))
                             {
                                 _state = State.State.Number;
                             }
-                            if (_charManager.IsDelimeter(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _state = State.State.Delimeter;
+                                _state = State.State.Delimiter;
                             }
                             if (_charManager.IsLetter(ch))
                             {
@@ -406,44 +409,44 @@ namespace LexicalAnalyzer
                             }
                             if (_charManager.IsOperator(ch))
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Operator;
                             }
                             if (ch == ';')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Separator;
                             }
                             if (ch == ' ')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 word = "";
                                 _state = State.State.Wait;
                             }
                             if (ch == '@')
                             {
-                                _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Error;
                             }
                             break;
                         case State.State.Separator:
                             word = "";
                             word += ch;
-                            _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                             word = "";
                             _state = State.State.Wait;
                             break;
-                        case State.State.Delimeter:
+                        case State.State.Delimiter:
                             word = "";
                             word += ch;
-                            _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                             word = "";
                             _state = State.State.Wait;
                             break;
                         case State.State.Keyword:
                             break;
                         case State.State.Error:
-                            _fileManager.WriteLine(_fileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                             word = "";
                             _state = State.State.Wait;
                             break;

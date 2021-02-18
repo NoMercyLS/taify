@@ -360,3 +360,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/.idea/.idea.LexicalAnalyzer/.idea/.gitignore
+/.idea/.idea.LexicalAnalyzer/.idea/.name
+/.idea/.idea.LexicalAnalyzer/.idea/encodings.xml
+/.idea/.idea.LexicalAnalyzer/.idea/indexLayout.xml
+/.idea/.idea.LexicalAnalyzer/.idea/riderModule.iml
+/.idea/.idea.LexicalAnalyzer/.idea/vcs.xml

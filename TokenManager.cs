@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LexicalAnalyzer
 {
     public class TokenManager
     {
-        Dictionary<string, string> _tokens;
+        private readonly Dictionary<string, string> _tokens;
 
         public TokenManager()
         {

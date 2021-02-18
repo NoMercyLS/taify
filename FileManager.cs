@@ -13,7 +13,7 @@ namespace LexicalAnalyzer
             _outputStream = outputStream;
         }
 
-        public string GetOutputString(string word, State.State state, int v, int h)
+        public static string GetOutputString(string word, State.State state, int v, int h)
         {
             return $"Word: {word} | Token: {state} | Position {v}:{h}";
         }
