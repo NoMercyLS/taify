@@ -30,7 +30,7 @@ namespace LexicalAnalyzer
                 : Console.Out;
 
             FileManager fileManager = new FileManager(inputStream, outputStream);
-            Analyzer analyzer = new Analyzer(fileManager);
+            NewAnalyzer analyzer = new NewAnalyzer(fileManager);
             analyzer.Analyze();
         }
     }

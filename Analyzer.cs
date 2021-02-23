@@ -29,11 +29,14 @@ namespace LexicalAnalyzer
             string line;
             while ((line = _fileManager.ReadLine()) != null)
             {
-                _lines.Add(line);
+                if (line.Length != 0)
+                {
+                    _lines.Add(line);
+                }
             }
         }
 
-        private char GetChar()
+        public char GetChar()
         {
             char ch = _lines[_verticalPos][_horizontalPos];
             //TODO: Add new state which drops current state on readln
@@ -57,11 +60,17 @@ namespace LexicalAnalyzer
             return ch;
         }
 
+        public void WriteLine(string word)
+        {
+            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+        }
+
         public void Analyze()
         {
             GetLines();
             string word = "";
             char ch = ' ';
+            char buff = ' ';
             while (_state != State.State.Final)
             {
                 try
@@ -82,12 +91,12 @@ namespace LexicalAnalyzer
                                 word += ch;
                                 break;
                             }
-                            if (ch == ';')
+                            if (_charManager.IsSeparator(ch))
                             {
                                 _state = State.State.Separator;
                                 break;
                             }
-                            if (ch == '@')
+                            if (_charManager.IsError(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
@@ -379,54 +388,69 @@ namespace LexicalAnalyzer
                             _state = State.State.Wait;
                             break;
                         case State.State.Operator:
-                            //TODO: Rework this case because of bug with = operator
-                            //TODO: Also needs to process == comparison
                             word = "";
                             word += ch;
-                            if (ch == '/')
+                            buff = GetChar();
+                            if (ch == buff)
                             {
-                                if (GetChar() == '/')
+                                if (ch == '/')
                                 {
-                                    word += '/';
+                                    word += ch;
                                     _state = State.State.Commentary;
                                     break;
                                 }
+                                if (ch == '=')
+                                {
+                                    word += ch;
+                                    _state = State.State.Comparison;
+                                    break;
+                                }
+                            }
+                            if (_charManager.IsDigit(buff) && (ch == '+' || ch == '-'))
+                            {
+                                word += buff;
+                                _state = State.State.Number;
+                                break;
                             }
                             _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                             word = "";
+                            ch = buff;
                             word += ch;
                             if (_charManager.IsDigit(ch))
                             {
                                 _state = State.State.Number;
+                                break;
                             }
-                            if (_charManager.IsDelimiter(ch))
+                            if (_charManager.IsComparison(ch))
                             {
-                                _state = State.State.Delimiter;
+                                _state = State.State.Comparison;
+                                break;
                             }
                             if (_charManager.IsLetter(ch))
                             {
                                 _state = State.State.Identifier;
+                                break;
                             }
-                            if (_charManager.IsOperator(ch))
+                            if (_charManager.IsDelimiter(ch))
                             {
-                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
-                                _state = State.State.Operator;
-                            }
-                            if (ch == ';')
-                            {
-                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
-                                _state = State.State.Separator;
-                            }
-                            if (ch == ' ')
-                            {
-                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
-                                word = "";
-                                _state = State.State.Wait;
+                                _state = State.State.Delimiter;
+                                break;
                             }
                             if (ch == '@')
                             {
-                                _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                                 _state = State.State.Error;
+                                break;
+                            }
+                            if (ch == ' ')
+                            {
+                                _state = State.State.Wait;
+                                word = "";
+                                break;
+                            }
+                            if (ch == ';')
+                            {
+                                _state = State.State.Separator;
+                                break;
                             }
                             break;
                         case State.State.Separator:
@@ -442,6 +466,78 @@ namespace LexicalAnalyzer
                             _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
                             word = "";
                             _state = State.State.Wait;
+                            break;
+                        case State.State.Comparison:
+                            word = "";
+                            word += ch;
+                            buff = GetChar();
+                            if (ch == '!')
+                            {
+                                if (buff == '=')
+                                {
+                                    word += buff;
+                                }
+                                else
+                                {
+                                    word += buff;
+                                    _state = State.State.Error;
+                                    break;
+                                }
+                            }
+                            if (ch == '=' || ch == '|' || ch == '&')
+                            {
+                                if (ch == buff)
+                                {
+                                    word += buff;
+                                }
+                                else if (ch == '=')
+                                {
+                                    ch = buff;
+                                    _state = State.State.Operator;
+                                    break;
+                                }
+                                else
+                                {
+                                    word += buff;
+                                    _state = State.State.Error;
+                                    break;
+                                }
+                            }
+                            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos, _horizontalPos));
+                            word = "";
+                            ch = buff;
+                            word += ch;
+                            if (_charManager.IsDigit(ch))
+                            {
+                                _state = State.State.Number;
+                                break;
+                            }
+                            if (_charManager.IsLetter(ch))
+                            {
+                                _state = State.State.Identifier;
+                                break;
+                            }
+                            if (_charManager.IsDelimiter(ch))
+                            {
+                                _state = State.State.Delimiter;
+                                break;
+                            }
+                            if (ch == '@')
+                            {
+                                _state = State.State.Error;
+                                break;
+                            }
+                            if (ch == ' ')
+                            {
+                                _state = State.State.Wait;
+                                word = "";
+                                break;
+                            }
+                            if (ch == ';')
+                            {
+                                _state = State.State.Separator;
+                                break;
+                            }
                             break;
                         case State.State.Keyword:
                             break;

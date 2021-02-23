@@ -13,6 +13,7 @@
         HexInteger,
         Commentary,
         Operator,
+        Comparison,
         Separator,
         Delimiter,
         Keyword,
