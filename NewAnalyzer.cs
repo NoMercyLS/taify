@@ -58,6 +58,7 @@ namespace LexicalAnalyzer
             {
                 _horizontalPos++;
             }
+
             return ch;
         }
 
@@ -80,7 +81,6 @@ namespace LexicalAnalyzer
             {
                 _state = State.State.Identifier;
                 WriteLine(word);
-
             }
         }
 
@@ -104,36 +104,43 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 _state = State.State.Number;
                                 break;
                             }
+
                             if (_charManager.IsError(ch))
                             {
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsLetter(ch))
                             {
                                 _state = State.State.Identifier;
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 _state = State.State.Operator;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             break;
                         case State.State.Identifier:
                             ch = GetChar();
@@ -145,6 +152,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 GetKeyword(word);
@@ -153,22 +161,26 @@ namespace LexicalAnalyzer
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 word += ch;
                                 break;
                             }
+
                             if (_charManager.IsError(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsLetter(ch))
                             {
                                 word += ch;
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 GetKeyword(word);
@@ -177,6 +189,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Operator;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 GetKeyword(word);
@@ -185,6 +198,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             break;
                         case State.State.Number:
                             ch = GetChar();
@@ -193,11 +207,13 @@ namespace LexicalAnalyzer
                                 _state = State.State.Integer;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 _state = State.State.Integer;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 word += ch;
@@ -205,14 +221,17 @@ namespace LexicalAnalyzer
                                 {
                                     _state = State.State.OctalInteger;
                                 }
+
                                 break;
                             }
+
                             if (_charManager.IsError(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsLetter(ch))
                             {
                                 if (word.Length == 1 && word[0] == '0')
@@ -223,6 +242,7 @@ namespace LexicalAnalyzer
                                         _state = State.State.BinaryInteger;
                                         break;
                                     }
+
                                     if (ch == 'x')
                                     {
                                         word += ch;
@@ -230,24 +250,29 @@ namespace LexicalAnalyzer
                                         break;
                                     }
                                 }
+
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 _state = State.State.Integer;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 _state = State.State.Integer;
                                 break;
                             }
+
                             if (ch == '.')
                             {
                                 word += ch;
                                 _state = State.State.Float;
                             }
+
                             break;
                         case State.State.Float:
                             ch = GetChar();
@@ -259,6 +284,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 WriteLine(word);
@@ -267,23 +293,27 @@ namespace LexicalAnalyzer
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 word += ch;
                                 break;
                             }
+
                             if (_charManager.IsError(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsLetter(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 WriteLine(word);
@@ -292,6 +322,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Operator;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 WriteLine(word);
@@ -300,6 +331,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             break;
                         case State.State.Integer:
                             WriteLine(word);
@@ -310,26 +342,31 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsError(ch) || _charManager.IsLetter(ch))
                             {
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 _state = State.State.Operator;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             break;
                         case State.State.BinaryInteger:
                             ch = GetChar();
@@ -341,6 +378,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 WriteLine(word);
@@ -349,6 +387,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 word += ch;
@@ -356,14 +395,17 @@ namespace LexicalAnalyzer
                                 {
                                     _state = State.State.Error;
                                 }
+
                                 break;
                             }
+
                             if (_charManager.IsError(ch) || _charManager.IsLetter(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 WriteLine(word);
@@ -372,6 +414,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Operator;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 WriteLine(word);
@@ -380,6 +423,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             break;
                         case State.State.OctalInteger:
                             ch = GetChar();
@@ -391,6 +435,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 WriteLine(word);
@@ -399,6 +444,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 word += ch;
@@ -406,14 +452,17 @@ namespace LexicalAnalyzer
                                 {
                                     _state = State.State.Error;
                                 }
+
                                 break;
                             }
+
                             if (_charManager.IsError(ch) || _charManager.IsLetter(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 WriteLine(word);
@@ -422,6 +471,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Operator;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 WriteLine(word);
@@ -430,6 +480,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             break;
                         case State.State.HexInteger:
                             ch = GetChar();
@@ -441,6 +492,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 WriteLine(word);
@@ -449,17 +501,20 @@ namespace LexicalAnalyzer
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 word += ch;
                                 break;
                             }
+
                             if (_charManager.IsError(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsLetter(ch))
                             {
                                 word += ch;
@@ -468,8 +523,10 @@ namespace LexicalAnalyzer
                                     _state = State.State.Error;
                                     break;
                                 }
+
                                 break;
                             }
+
                             if (_charManager.IsOperator(ch))
                             {
                                 WriteLine(word);
@@ -478,6 +535,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Operator;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 WriteLine(word);
@@ -486,6 +544,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             break;
                         case State.State.Commentary:
                             WriteLine(word);
@@ -506,6 +565,7 @@ namespace LexicalAnalyzer
                                     break;
                                 }
                             }
+
                             if (ch == '/')
                             {
                                 buff = GetChar();
@@ -517,6 +577,7 @@ namespace LexicalAnalyzer
                                     break;
                                 }
                             }
+
                             WriteLine(word);
                             ch = buff;
                             if (_charManager.IsComparison(ch))
@@ -526,6 +587,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Comparison;
                                 break;
                             }
+
                             if (_charManager.IsDelimiter(ch))
                             {
                                 word = "";
@@ -533,12 +595,14 @@ namespace LexicalAnalyzer
                                 _state = State.State.Delimiter;
                                 break;
                             }
+
                             if (_charManager.IsError(ch))
                             {
                                 word += ch;
                                 _state = State.State.Error;
                                 break;
                             }
+
                             if (_charManager.IsLetter(ch))
                             {
                                 word = "";
@@ -546,6 +610,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Identifier;
                                 break;
                             }
+
                             if (_charManager.IsSeparator(ch))
                             {
                                 word = "";
@@ -553,12 +618,14 @@ namespace LexicalAnalyzer
                                 _state = State.State.Separator;
                                 break;
                             }
+
                             if (_charManager.IsDigit(ch))
                             {
                                 word = "";
                                 word += ch;
                                 _state = State.State.Number;
                             }
+
                             break;
                         case State.State.Separator:
                             WriteLine(word);
@@ -572,6 +639,7 @@ namespace LexicalAnalyzer
                                 _state = State.State.Wait;
                                 break;
                             }
+
                             WriteLine(word);
                             word = "";
                             _state = State.State.Wait;
@@ -585,6 +653,7 @@ namespace LexicalAnalyzer
                                     word += buff;
                                 }
                             }
+
                             WriteLine(word);
                             word = "";
                             buff = ' ';
@@ -601,8 +670,13 @@ namespace LexicalAnalyzer
                 {
                     if (_state != State.State.Wait)
                     {
-                        WriteLine(word);
+                        if (_state == State.State.Number)
+                        {
+                            _state = State.State.Integer;
+                            WriteLine(word);
+                        }
                     }
+
                     _state = State.State.Final;
                     WriteLine("");
                 }
