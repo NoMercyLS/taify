@@ -36,7 +36,7 @@ namespace LexicalAnalyzer
             }
         }
 
-        public char GetChar()
+        private char GetChar()
         {
             char ch = _lines[_verticalPos][_horizontalPos];
             //Console.WriteLine($"DEBUG (state = {_state}");
@@ -61,12 +61,14 @@ namespace LexicalAnalyzer
             return ch;
         }
 
-        public void WriteLine(string word)
+        private void WriteLine(string word)
         {
-            _fileManager.WriteLine(FileManager.GetOutputString(word, _state, _verticalPos + 1, _horizontalPos - 1));
+            _fileManager.WriteLine(_verticalPos > 0
+                ? FileManager.GetOutputString(word, _state, _verticalPos + 1, _horizontalPos)
+                : FileManager.GetOutputString(word, _state, _verticalPos + 1, _horizontalPos - 1));
         }
 
-        public void GetKeyword(string word)
+        private void GetKeyword(string word)
         {
             try
             {
